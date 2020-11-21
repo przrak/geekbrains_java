@@ -46,6 +46,11 @@ public class Application {
 
     public static void initTwoDimensionalArray(int[][] arr) {
         for (int i = 0; i < arr.length; i++) {
+            for (int j = arr[i].length - 1; j >= 0; j--) {
+                if (j == arr[i].length - 1 - i) {
+                    arr[i][j] = 1;
+                }
+            }
             for (int j = 0; j < arr[i].length; j++) {
                 if (i == j) {
                     arr[i][j] = 1;
