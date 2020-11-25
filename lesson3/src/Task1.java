@@ -1,3 +1,5 @@
+import org.w3c.dom.ls.LSOutput;
+
 import java.util.Random;
 import java.util.Scanner;
 
@@ -18,7 +20,16 @@ public class Task1 {
         while (inGame) {
             if (attempts == 0) {
                 System.out.println("Игра закончена, вы проиграли:(");
-                inGame = false;
+                System.out.println("Повторить игру еще раз? 1 – да / 0 – нет");
+                if (scanner.hasNextInt()) {
+                    int value = scanner.nextInt();
+                    if (value == 1) {
+                        attempts = 3;
+                        System.out.println("Загадано число от 0 до 9, попробуйте его отгадать");
+                    } else if (value == 0) {
+                        inGame = false;
+                    }
+                }
             } else {
                 System.out.println("У вас " + attempts + " попытки(ка)");
                 System.out.println("Введите число:");
@@ -30,7 +41,15 @@ public class Task1 {
                     }
                     if (num == value) {
                         System.out.println("Поздравляем! Вы отгадали!");
-                        inGame = false;
+                        System.out.println("Повторить игру еще раз? 1 – да / 0 – нет");
+                        if (scanner.hasNextInt()) {
+                            value = scanner.nextInt();
+                            if (value == 1) {
+                                attempts = 3;
+                            } else if (value == 0) {
+                                inGame = false;
+                            }
+                        }
                     } else {
                         System.out.println("Не верное число");
                         if (value > num) {
