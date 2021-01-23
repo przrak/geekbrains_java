@@ -59,7 +59,14 @@ public class ClientHandler {
                             break;
                         }
 
-                        server.broadcastMsg(this, str);
+                        String[] parsedString = str.split("\\s", 3);
+                        if ("/w".equals(parsedString[0])) {
+                            if (parsedString.length == 3) {
+                                server.tryToSendPrivateMsg(this, parsedString[1], parsedString[2]);
+                            }
+                        } else {
+                            server.broadcastMsg(this, str);
+                        }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

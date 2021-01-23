@@ -39,9 +39,16 @@ public class Server {
     }
 
     public void broadcastMsg(ClientHandler clientHandler, String msg){
-        String message = String.format("[ %s ]: %s", clientHandler.getNickname(), msg);
         for (ClientHandler c : clients) {
-            c.sendMsg(message);
+            c.sendMsg(this.messageWithNickname(clientHandler, msg));
+        }
+    }
+
+    public void tryToSendPrivateMsg(final ClientHandler author, final String toNickname, final String msg) {
+        ClientHandler clientHandler = this.findClientHandlerByNickname(toNickname);
+        if (clientHandler != null) {
+            clientHandler.sendMsg(this.messageWithNickname(author, msg));
+            author.sendMsg(this.messageWithNickname(author, msg));
         }
     }
 
@@ -55,5 +62,22 @@ public class Server {
 
     public AuthService getAuthService() {
         return authService;
+    }
+
+    private ClientHandler findClientHandlerByNickname(final String nickname) {
+        if (nickname == null || nickname.isEmpty()) {
+//            throw new RuntimeException("Nickname not found");
+            return null;
+        }
+        for (ClientHandler clientHandler : clients) {
+            if (clientHandler.getNickname().equals(nickname)) {
+                return clientHandler;
+            }
+        }
+        return null;
+    }
+
+    private String messageWithNickname(final ClientHandler clientHandler, final String msg) {
+        return String.format("[ %s ]: %s", clientHandler.getNickname(), msg);
     }
 }
