@@ -1,24 +1,25 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 /**
  * @author Dmitriy Bokach
  */
-public class Server {
-    public static void main(String[] args) {
-        Socket clientSocket = null;
-        Scanner scanner = new Scanner(System.in);
+public class Client {
+    private static final String SERVER_ADDRESS = "localhost";
+    private static final int SERVER_PORT = 8189;
 
-        try (ServerSocket serverSocket = new ServerSocket(8189)) {
-            System.out.println("Сервер запущен");
-            clientSocket = serverSocket.accept();
-            System.out.println("Подключен клиент: " + clientSocket.getRemoteSocketAddress());
-            DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
-            DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
+    public static void main(String[] args) {
+        Socket socket = null;
+        Scanner scanner = new Scanner(System.in);
+        try {
+            socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+            System.out.println("Подключен к серверу: " + socket.getRemoteSocketAddress());
+            DataInputStream inputStream = new DataInputStream(socket.getInputStream());
+            DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
 
             //Поток на чтение
             Thread threadReader = new Thread(() -> {
@@ -43,6 +44,9 @@ public class Server {
                     System.out.println("Клиент: " + str);
                 }
             }
+
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
