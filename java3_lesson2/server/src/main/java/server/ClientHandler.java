@@ -7,7 +7,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.sql.SQLException;
 
 public class ClientHandler {
     private Server server;
@@ -89,6 +88,22 @@ public class ClientHandler {
                                 server.privateMsg(this, token[1], token[2]);
                             }
 
+                            if (str.startsWith(Command.CHANGE_NICKNAME)) {
+                                String[] token = str.split("\\s");
+                                if (server.isLoginAuthenticated(login)) {
+                                    String newNick = server.getAuthService()
+                                            .changeNickname(login, token[1]);
+                                    if (newNick != null) {
+                                        nickname = newNick;
+                                        sendMsg(Command.CHANGE_NICKNAME + " " + nickname);
+                                        sendMsg("Никнейм изменен успешно");
+                                        server.broadcastClientList();
+                                    } else {
+                                        sendMsg("Произошла ошибка при смене никнейма");
+                                    }
+                                }
+                            }
+
                         } else {
                             server.broadcastMsg(this, str);
                         }
@@ -99,8 +114,6 @@ public class ClientHandler {
                     System.out.println(e.getMessage());
                 } catch (IOException e) {
                     e.printStackTrace();
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
                 } finally {
                     server.unsubscribe(this);
                     try {

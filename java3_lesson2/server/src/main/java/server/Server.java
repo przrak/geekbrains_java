@@ -18,7 +18,7 @@ public class Server {
 
     public Server() throws SQLException, ClassNotFoundException {
         clients = new CopyOnWriteArrayList<>();
-        authService = new SimpleAuthService();
+        authService = new DatabaseAuthService();
 
         try {
             server = new ServerSocket(PORT);
