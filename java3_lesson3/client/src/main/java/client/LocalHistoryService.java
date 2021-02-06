@@ -28,7 +28,7 @@ public class LocalHistoryService {
         } else {
             file = new File("history_" + nickname + ".txt");
             try {
-                int n_lines = 5;
+                int n_lines = 100;
                 int counter = 0;
                 List<String> lines = new ArrayList<>();
                 ReversedLinesFileReader object = new ReversedLinesFileReader(file,
