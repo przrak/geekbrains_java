@@ -1,6 +1,7 @@
 public class Main {
     public static void main(String[] args) {
-        Task task = new Task();
+        String[] abc = {"A","B","C","A","B","C","A","B","C","A","B","C","A","B","C"};
+        Task task = new Task(abc);
         Thread t1 = new Thread(new Consumer(task, "A"));
         Thread t2 = new Thread(new Consumer(task, "B"));
         Thread t3 = new Thread(new Consumer(task, "C"));
@@ -13,8 +14,12 @@ public class Main {
 class Task {
 
     private final Object mon = new Object();
-    private final String[] abc = {"A","B","C","A","B","C","A","B","C","A","B","C","A","B","C"};
+    private final String[] abc;
     private int counter = 0;
+
+    public Task(String[] abc) {
+        this.abc = abc;
+    }
 
     public void print(final String msg) {
         synchronized (mon) {
